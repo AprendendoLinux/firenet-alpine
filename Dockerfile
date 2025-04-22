@@ -16,12 +16,18 @@ RUN apk add --no-cache \
     # Para suporte a requisições HTTP (curl)
     curl \
     curl-dev \
+    # Dependências para a extensão GD
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
     && apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
         pdo_mysql \
         mbstring \
         curl \
+        gd \
     && apk del .build-deps curl-dev \
     # Configura o timezone para America/Sao_Paulo
     && ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
